@@ -1,6 +1,7 @@
 import { useState } from "react";
+import Swal from 'sweetalert2';
 
-const Controlado = () => {
+const ToDoForm = ({addTodo}) => {
   const [todo, setTodo] = useState({
     title: "",
     description: "",
@@ -11,6 +12,25 @@ const Controlado = () => {
   const {title, description, state, priority} = todo
   const handleSubmit = (event) => {
     event.preventDefault();
+    if(!title.trim()  || !description.trim()){
+      return Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Title and description are mandatory",
+        footer: 'Please, provide a title and a description'
+      });
+    }
+    addTodo({
+      id: Date.now(),
+      ...todo,
+      state: state === 'complete'
+    })
+    return Swal.fire({
+      icon: "success",
+      title: "Your ToDo has been saved!",
+      showConfirmButton: false,
+      timer: 1500
+    });
   };
 
   
@@ -69,4 +89,4 @@ const Controlado = () => {
   );
 };
 
-export default Controlado;
+export default ToDoForm;
